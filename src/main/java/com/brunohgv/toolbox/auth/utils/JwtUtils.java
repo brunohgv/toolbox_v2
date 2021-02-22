@@ -23,13 +23,12 @@ public class JwtUtils {
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        String jwtSecret = System.getenv(this.jwtSecretEnvVariable);
         return Jwts.builder()
                 .addClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME_IN_MILLIS))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(SignatureAlgorithm.HS512, this.getSecretEnvVariable())
                 .compact();
     }
 
@@ -49,6 +48,10 @@ public class JwtUtils {
     }
 
     private Claims getClaims(String token) {
-        return Jwts.parser().setSigningKey(jwtSecretEnvVariable).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(this.getSecretEnvVariable()).parseClaimsJws(token).getBody();
+    }
+
+    private String getSecretEnvVariable() {
+        return System.getenv(this.jwtSecretEnvVariable);
     }
 }

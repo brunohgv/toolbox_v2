@@ -3,7 +3,9 @@ package com.brunohgv.toolbox.auth.filters;
 import com.brunohgv.toolbox.auth.services.CustomUserDetailsService;
 import com.brunohgv.toolbox.auth.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -23,8 +25,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private CustomUserDetailsService userDetailsService;
     private JwtUtils jwtUtils;
 
-    private static String AUTHORIZATION_HEADER = "Authorization";
-    private static String TOKEN_PREFIX = "Bearer ";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String TOKEN_PREFIX = "Bearer ";
 
     @Autowired
     public JwtRequestFilter(CustomUserDetailsService userDetailsService, JwtUtils jwtUtils) {
